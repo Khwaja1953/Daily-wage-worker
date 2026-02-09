@@ -1,0 +1,46 @@
+const mongoose=require('mongoose')
+const userSchema=new mongoose.Schema({
+fullname:{
+    type:string,
+    required:true
+},
+password:{
+    type:string,
+    required:true
+},
+role:{
+    type:string,
+    enum:['WORKER','EMPLOYER'],
+    default:'EMPLOYER',
+    required:true
+},
+location:{
+    type:"Point",
+    coordinates:[longitube,latitude]
+},
+profile:{
+    type:string,
+    default:""
+},
+phoneNo:{
+    type:Number,
+    required:true
+},
+jobCategory:{
+    typr:string,
+    enum:['ELECTRICIAN','PLUMBER','CARPENTER','PAINTER','MECHANIC','MAID','LABOURER'],
+    required:true
+},
+availability:{
+    type:string,
+    enum:['AVAILABLE','BUSY']
+},
+ratings:{
+    type:Number,
+    min:1,
+    max:5,
+    default:"1"
+},
+
+},{timestamps:true})
+module.exports=mongoose.model('User',userSchema)
