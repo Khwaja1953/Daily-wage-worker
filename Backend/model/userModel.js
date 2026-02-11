@@ -9,7 +9,7 @@ const serviceAreaSchema = new mongoose.Schema(
 
     area: {
       type: String,
-      required: true, // locality / area name
+      required: true,
     },
 
     city: {
@@ -32,33 +32,36 @@ const serviceAreaSchema = new mongoose.Schema(
       match: [/^\d{6}$/, "Please enter a valid pincode"],
     },
 
-    geo: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        default: "Point",
-      },
-      coordinates: {
-        lng: {type: Number,validate: {
-          validator: (val) => val.length === 2,
-          message: "Geo coordinates must be [longitude, latitude]",
-        },},
-        lat: {type: Number,validate: {
-          validator: (val) => val.length === 2,
-          message: "Geo coordinates must be [longitude, latitude]",
-        },}
-        
-      },
-    },
+geo: {
+  type: {
+    type: String,
+    enum: ["Point"],
+    default: "Point",
+  },
+  coordinates: {
+    type: [Number], // [longitude, latitude]
+    required: true,
+  },
+},
   },
   { _id: false }
 );
 
 const userSchema = new mongoose.Schema(
   {
-    /* =========================
-       BASIC USER INFO
-    ========================== */
+   addresses: [
+    {
+      label: {
+        type: String,
+        enum: ["home", "work", "other"],
+        default: "home",
+      },
+      address: String,
+      city: String,
+      pincode: String,
+    },
+  ],
+  
     name: {
       type: String,
       required: true,
@@ -106,9 +109,6 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
 
-    /* =========================
-       SERVICE AREAS (WORKER)
-    ========================== */
     serviceAreas: {
       type: [serviceAreaSchema],
       validate: {
@@ -119,9 +119,6 @@ const userSchema = new mongoose.Schema(
       },
     },
 
-    /* =========================
-       WORKER PROFILE
-    ========================== */
     workerProfile: {
       services: {
         type: [String],
@@ -197,29 +194,13 @@ const userSchema = new mongoose.Schema(
         default: "pending",
       },
     },
-
-    /* =========================
-       CUSTOMER PROFILE
-    ========================== */
-    customerProfile: {
-      addressBook: [
-        {
-          label: String,
-          address: String,
-          city: String,
-          pincode: String,
-        },
-      ],
-    },
   },
   { timestamps: true }
 );
 
-/* =========================
-   INDEXES
-========================== */
+
 userSchema.index({ "serviceAreas.geo": "2dsphere" });
 userSchema.index({ role: 1 });
-userSchema.index({ phone: 1 });
+
 
 module.exports = mongoose.model("User", userSchema);
