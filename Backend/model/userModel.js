@@ -32,17 +32,7 @@ const serviceAreaSchema = new mongoose.Schema(
       match: [/^\d{6}$/, "Please enter a valid pincode"],
     },
 
-geo: {
-  type: {
-    type: String,
-    enum: ["Point"],
-    default: "Point",
-  },
-  coordinates: {
-    type: [Number], // [longitude, latitude]
-    required: true,
-  },
-},
+
   },
   { _id: false }
 );
@@ -122,12 +112,12 @@ const userSchema = new mongoose.Schema(
     workerProfile: {
       services: {
         type: [String],
-        validate: {
-          validator: function (val) {
-            return this.role !== "worker" || val.length > 0;
-          },
-          message: "Worker must provide at least one service",
-        },
+        // validate: {
+        //   validator: function (val) {
+        //     return this.role !== "worker" || val.length > 0;
+        //   },
+        //   message: "Worker must provide at least one service",
+        // },
       },
 
       experience: {
@@ -140,10 +130,10 @@ const userSchema = new mongoose.Schema(
         default: true,
       },
 
-      workingHours: {
-        from: String,
-        to: String,
-      },
+      // workingHours: {
+      //   from: String,
+      //   to: String,
+      // },
 
       pricePerHour: {
         type: Number,
@@ -183,10 +173,10 @@ const userSchema = new mongoose.Schema(
 ],
 
 
-      totalJobs: {
-        type: Number,
-        default: 0,
-      },
+      // totalJobs: {
+      //   type: Number,
+      //   default: 0,
+      // },
 
       kycStatus: {
         type: String,
