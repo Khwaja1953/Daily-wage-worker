@@ -122,12 +122,12 @@ const userSchema = new mongoose.Schema(
     workerProfile: {
       services: {
         type: [String],
-        validate: {
-          validator: function (val) {
-            return this.role !== "worker" || val.length > 0;
-          },
-          message: "Worker must provide at least one service",
-        },
+        // validate: {
+        //   validator: function (val) {
+        //     return this.role !== "worker" || val.length > 0;
+        //   },
+        //   message: "Worker must provide at least one service",
+        // },
       },
 
       experience: {

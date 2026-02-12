@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/signup', (req, res) => {
 
   const { role } = req.body;
-
+  
   if (!role) {
     return res.status(400).json({ message: "Role is required" });
   }

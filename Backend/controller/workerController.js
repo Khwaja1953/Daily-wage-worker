@@ -4,12 +4,13 @@ const bcrypt=require('bcrypt')
 const handleWorkerSignup=async(req,res)=>{
     try{
     const { name,
-      profile,
-      email,
+      profile, email,
       phone,
       password,
-      addresses,services,experience,workingHours,
-      pricePerDay,pricePerHour,kycStatus,serviceAreas,workerProfile}=req.body;
+      addresses, serviceAreas, services,workerProfile,experience,workingHours,
+      pricePerDay,pricePerHour,kycStatus}=req.body;
+      console.log(workerProfile)
+       
 
     if(!name || !phone || !password){
         return res.status(400).send({message:"name or password or phone is required"})
@@ -22,7 +23,7 @@ const handleWorkerSignup=async(req,res)=>{
       });
     }
 
-    if (!workerProfile || !workerProfile.services || workerProfile.services.length === 0) {
+    if (!workerProfile || !workerProfile.services ) {
       return res.status(400).json({
         message: "Worker must provide at least one service"
       });
@@ -44,7 +45,7 @@ const handleWorkerSignup=async(req,res)=>{
         role:"worker",
         serviceAreas: serviceAreas, 
         workerProfile: {            
-            services:[],
+            services,
             experience,
             workingHours,
             pricePerHour,
