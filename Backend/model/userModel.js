@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// service area specifes where the worker is willing to work
 const serviceAreaSchema = new mongoose.Schema(
   {
     address: {
@@ -61,7 +62,7 @@ const userSchema = new mongoose.Schema(
 
     profile: {
       type: String, // image URL
-      default: "",
+      default: "pfp.png",
     },
 
     email: {
@@ -94,7 +95,11 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
 
-    isBlocked: {
+//? to verify OTP
+verificationCode :String,
+    
+
+isBlocked: {
       type: Boolean,
       default: false,
     },
@@ -103,6 +108,11 @@ const userSchema = new mongoose.Schema(
       type: [serviceAreaSchema],
       validate: {
         validator: function (val) {
+          //val means: The value of the field being validated
+          //Whatever value serviceAreas has, that becomes val => [ { area: "...", city: "..." } ]
+
+//? "this" here refers to the entire documneted being validated
+// val.length > 0 indicates that there exists atleast one obj in the array of serivceAreas
           return this.role !== "worker" || val.length > 0;
         },
         message: "Worker must have at least one service area",
@@ -112,14 +122,7 @@ const userSchema = new mongoose.Schema(
     workerProfile: {
       services: {
         type: [String],
-        // validate: {
-        //   validator: function (val) {
-        //     return this.role !== "worker" || val.length > 0;
-        //   },
-        //   message: "Worker must provide at least one service",
-        // },
       },
-
       experience: {
         type: Number,
         min: 0,
@@ -143,7 +146,7 @@ const userSchema = new mongoose.Schema(
         type: Number,
         min:0
       },
-
+// ratings/reviews given by other users
       ratings: [
   {
     user: {
@@ -173,11 +176,6 @@ const userSchema = new mongoose.Schema(
 ],
 
 
-      // totalJobs: {
-      //   type: Number,
-      //   default: 0,
-      // },
-
       kycStatus: {
         type: String,
         enum: ["pending", "approved", "rejected"],
@@ -189,8 +187,9 @@ const userSchema = new mongoose.Schema(
 );
 
 
-userSchema.index({ "serviceAreas.geo": "2dsphere" });
+
 userSchema.index({ role: 1 });
+// above line helps mongoDB to filter out documents based on role much faster
 
 
 module.exports = mongoose.model("User", userSchema);

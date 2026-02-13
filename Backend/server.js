@@ -1,7 +1,7 @@
 require('dotenv').config()
 const mongoose=require('mongoose')
 const express=require('express')
-const userRoute=require('./routes/userRoute')
+const userRoutes=require('./routes/userRoutes')
 
 const app=express()
 
@@ -16,7 +16,7 @@ if (!MONGO_URI) {
 }
 
 
-app.use('/api',userRoute)
+app.use('/api/user',userRoutes)
 
 mongoose.connect(MONGO_URI)
     .then(() => console.log('Connected to MongoDB'))
@@ -25,6 +25,7 @@ mongoose.connect(MONGO_URI)
         process.exit(1);
     });
 
+  
 app.listen(PORT,()=>{
-    console.log(`listening on port ${PORT}`)
+    console.log(`server is up and running at http://localhost:${PORT}`)
 })
